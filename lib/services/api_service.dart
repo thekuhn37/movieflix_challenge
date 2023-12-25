@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:movie_challenge/models/detail_model.dart';
 import 'package:movie_challenge/models/nowmovie_model.dart';
 import 'package:movie_challenge/models/popmovie_model.dart';
 import 'package:movie_challenge/models/soonmovie_model.dart';
@@ -57,6 +58,16 @@ class ApiService {
         );
       }
       return soonmovieInstances;
+    }
+    throw Error();
+  }
+
+  static Future<MovieDetailModel> getDetailById(int id) async {
+    final url = Uri.parse('$baseURL/$id');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final detail = jsonDecode(response.body);
+      return MovieDetailModel.fromJson(detail);
     }
     throw Error();
   }

@@ -3,6 +3,7 @@ import 'package:movie_challenge/models/nowmovie_model.dart';
 import 'package:movie_challenge/models/popmovie_model.dart';
 import 'package:movie_challenge/models/soonmovie_model.dart';
 import 'package:movie_challenge/services/api_service.dart';
+import 'package:movie_challenge/widgets/movie_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -14,90 +15,86 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Popular Movies',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  FutureBuilder(
-                    future: popmovies,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Container(
-                            height: 300,
-                            decoration: const BoxDecoration(),
-                            child: Expanded(child: makeList(snapshot)));
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    'Now in Cinemas',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  FutureBuilder(
-                    future: nowmovies,
-                    builder: (context, snapshot2) {
-                      if (snapshot2.hasData) {
-                        return Container(
-                            height: 300,
-                            decoration: const BoxDecoration(),
-                            child: Expanded(child: makeList2(snapshot2)));
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    'Coming Soon',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  FutureBuilder(
-                    future: soonmovies,
-                    builder: (context, snapshot3) {
-                      if (snapshot3.hasData) {
-                        return Container(
-                            height: 300,
-                            decoration: const BoxDecoration(),
-                            child: Expanded(child: makeList3(snapshot3)));
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                  ),
-                ],
+      appBar: AppBar(
+        backgroundColor: Colors.white.withOpacity(0),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Popular Movies',
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              FutureBuilder(
+                future: popmovies,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Container(
+                        height: 300,
+                        decoration: const BoxDecoration(),
+                        child: Expanded(child: makeList(snapshot)));
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Now in Cinemas',
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              FutureBuilder(
+                future: nowmovies,
+                builder: (context, snapshot2) {
+                  if (snapshot2.hasData) {
+                    return Container(
+                        height: 300,
+                        decoration: const BoxDecoration(),
+                        child: Expanded(child: makeList2(snapshot2)));
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Coming Soon',
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              FutureBuilder(
+                future: soonmovies,
+                builder: (context, snapshot3) {
+                  if (snapshot3.hasData) {
+                    return Container(
+                        height: 300,
+                        decoration: const BoxDecoration(),
+                        child: Expanded(child: makeList3(snapshot3)));
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -111,15 +108,7 @@ ListView makeList(AsyncSnapshot<List<PopMovieModel>> snapshot) {
     itemBuilder: (context, index) {
       // print(index);
       var popmovie = snapshot.data![index];
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: Image.network(
-          popmovie.thumb,
-        ),
-      );
+      return Movie(type: '$popmovie', thumb: popmovie.thumb, id: popmovie.id);
       // Text(popmovie.title);
     },
     separatorBuilder: ((context, index) => const SizedBox(
@@ -139,17 +128,7 @@ ListView makeList2(AsyncSnapshot<List<NowMovieModel>> snapshot2) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity, // Take the full width available
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              clipBehavior: Clip.hardEdge,
-              child: Image.network(
-                nowmovie.thumb,
-                fit: BoxFit.cover, // Ensure the image covers the container
-              ),
-            ),
+            Movie(type: '$nowmovie', thumb: nowmovie.thumb, id: nowmovie.id),
             const SizedBox(height: 5),
             Text(
               nowmovie.title,
@@ -178,17 +157,7 @@ ListView makeList3(AsyncSnapshot<List<SoonMovieModel>> snapshot3) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity, // Take the full width available
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              clipBehavior: Clip.hardEdge,
-              child: Image.network(
-                soonmovie.thumb,
-                fit: BoxFit.cover, // Ensure the image covers the container
-              ),
-            ),
+            Movie(type: '$soonmovie', thumb: soonmovie.thumb, id: soonmovie.id),
             const SizedBox(height: 5),
             Text(
               soonmovie.title,
