@@ -36,7 +36,7 @@ class Movie extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(20),
         ),
         clipBehavior: Clip.hardEdge,
         child: Image.network(

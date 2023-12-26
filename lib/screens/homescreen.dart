@@ -36,9 +36,12 @@ class HomeScreen extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Container(
-                        height: 300,
-                        decoration: const BoxDecoration(),
-                        child: Expanded(child: makeList(snapshot)));
+                      height: 300,
+                      decoration:
+                          const BoxDecoration(color: Colors.amberAccent),
+                      // 식별 편하게 잠시 색깔을 넣음.
+                      child: makeList(snapshot),
+                    );
                   }
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -62,7 +65,7 @@ class HomeScreen extends StatelessWidget {
                     return Container(
                         height: 300,
                         decoration: const BoxDecoration(),
-                        child: Expanded(child: makeList2(snapshot2)));
+                        child: makeList2(snapshot2));
                   }
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -70,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               const Text(
                 'Coming Soon',
@@ -86,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                     return Container(
                         height: 300,
                         decoration: const BoxDecoration(),
-                        child: Expanded(child: makeList3(snapshot3)));
+                        child: makeList3(snapshot3));
                   }
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -112,7 +115,7 @@ ListView makeList(AsyncSnapshot<List<PopMovieModel>> snapshot) {
       // Text(popmovie.title);
     },
     separatorBuilder: ((context, index) => const SizedBox(
-          width: 30,
+          width: 20,
         )),
   );
 }
@@ -132,7 +135,7 @@ ListView makeList2(AsyncSnapshot<List<NowMovieModel>> snapshot2) {
             const SizedBox(height: 5),
             Text(
               nowmovie.title,
-              maxLines: 3,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
