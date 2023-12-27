@@ -10,13 +10,14 @@ class ApiService {
   static const popular = "popular";
   static const playnow = "now-playing";
   static const comingsoon = "coming-soon";
-
+// jsonDecode(utf8.decode(response.bodyBytes));
   static Future<List<PopMovieModel>> getPopMovies() async {
     List<PopMovieModel> popmovieInstances = [];
     final url = Uri.parse('$baseURL/$popular');
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final Map<String, dynamic> responseData =
+          jsonDecode(utf8.decode(response.bodyBytes));
       final List<dynamic> popmovies = responseData['results'];
       for (var popmovie in popmovies) {
         popmovieInstances.add(
@@ -33,7 +34,8 @@ class ApiService {
     final url = Uri.parse('$baseURL/$playnow');
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final Map<String, dynamic> responseData =
+          jsonDecode(utf8.decode(response.bodyBytes));
       final List<dynamic> nowmovies = responseData['results'];
       for (var nowmovie in nowmovies) {
         nowmovieInstances.add(
@@ -50,7 +52,8 @@ class ApiService {
     final url = Uri.parse('$baseURL/$comingsoon');
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final Map<String, dynamic> responseData =
+          jsonDecode(utf8.decode(response.bodyBytes));
       final List<dynamic> soonmovies = responseData['results'];
       for (var soonmovie in soonmovies) {
         soonmovieInstances.add(
@@ -63,10 +66,11 @@ class ApiService {
   }
 
   static Future<MovieDetailModel> getDetailById(int id) async {
-    final url = Uri.parse('$baseURL/$id');
+    final url = Uri.parse('$baseURL/movie?id=$id');
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      final detail = jsonDecode(response.body);
+      final detail = jsonDecode(utf8.decode(response.bodyBytes));
+      // print(detail);
       return MovieDetailModel.fromJson(detail);
     }
     throw Error();

@@ -35,10 +35,10 @@ class HomeScreen extends StatelessWidget {
                 future: popmovies,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Container(
-                      height: 300,
-                      decoration:
-                          const BoxDecoration(color: Colors.amberAccent),
+                    return SizedBox(
+                      height: 200,
+                      // decoration:
+                      // const BoxDecoration(color: Colors.amberAccent),
                       // 식별 편하게 잠시 색깔을 넣음.
                       child: makeList(snapshot),
                     );
@@ -144,7 +144,7 @@ ListView makeList2(AsyncSnapshot<List<NowMovieModel>> snapshot2) {
       );
     },
     separatorBuilder: (context, index) => const SizedBox(
-      width: 10,
+      width: 20,
     ),
   );
 }
@@ -173,7 +173,7 @@ ListView makeList3(AsyncSnapshot<List<SoonMovieModel>> snapshot3) {
       );
     },
     separatorBuilder: (context, index) => const SizedBox(
-      width: 10,
+      width: 20,
     ),
   );
 }
