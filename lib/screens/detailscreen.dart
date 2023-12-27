@@ -21,10 +21,11 @@ class DetailScreen extends StatefulWidget {
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends State<DetailScreen>
+    with SingleTickerProviderStateMixin {
   late Future<MovieDetailModel> details;
-// State class안에 future를 만들기
-// 나중에 유저가 영화 클릭하고 받는 id를 통해서 본 Future 값이 들어올 것이므로 late 사용.
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
 
   @override
   void initState() {
@@ -32,10 +33,26 @@ class _DetailScreenState extends State<DetailScreen> {
     details = ApiService.getDetailById(widget.id);
     // widget.id라고 씀으로서 본 state를 품고 있는 statefulwidget에 속해있는 정보에
     //접근할 수 있다.  그래야 reference 가능.
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _offsetAnimation = Tween<Offset>(
+      begin: const Offset(2.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+
+    // Initialize the animation
+    _controller.forward();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_offsetAnimation.value);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -53,14 +70,17 @@ class _DetailScreenState extends State<DetailScreen> {
             return Stack(
               children: [
                 // Background poster image
-                ColorFiltered(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6), BlendMode.srcOver),
-                  child: Image.network(
-                    snapshot.data!.poster,
-                    fit: BoxFit.fitHeight,
-                    height: double.infinity,
-                    width: double.infinity,
+                Transform.translate(
+                  offset: _offsetAnimation.value,
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.6), BlendMode.srcOver),
+                    child: Image.network(
+                      snapshot.data!.poster,
+                      fit: BoxFit.fitHeight,
+                      height: double.infinity,
+                      width: double.infinity,
+                    ),
                   ),
                 ),
                 // Details centered on the screen
@@ -104,7 +124,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         const SizedBox(height: 20),
                         // Rate
                         Text(
-                          'Rate: ${snapshot.data!.rate}',
+                          'Rate: ⭐️ ${snapshot.data!.rate}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
